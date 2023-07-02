@@ -17,9 +17,17 @@ impl Server {
         let listener = TcpListener::bind(&self.addr).unwrap();
         loop {
             match listener.accept() {
-                Ok((stream, client_addr)) => {
-                    println!("Accepted connection from client : {}", client_addr);
-                    println!("Byte stream from client : {:?}", &stream);
+                Ok((mut stream, client_addr)) => {
+                    let mut buffer = [0; 1024];
+                    match stream.read(&mut buffer) {
+                       Ok(_) => {
+                         println!("Received buffer: {}", String::from_utf8_lossy(&buffer))
+                       },
+                       Err(_) => {
+                        
+                       },
+                    }
+                    
                 },
                 Err(err) => {
                     println!("Failed to accept connection. Exception: {}", err);
